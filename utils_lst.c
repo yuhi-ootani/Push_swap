@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   b_stack_init.c                                     :+:      :+:    :+:   */
+/*   utils_lst.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oyuhi <oyuhi@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/06 13:56:43 by oyuhi             #+#    #+#             */
-/*   Updated: 2025/01/06 19:01:48 by oyuhi            ###   ########.fr       */
+/*   Created: 2025/01/07 08:45:00 by oyuhi             #+#    #+#             */
+/*   Updated: 2025/01/09 10:29:51 by oyuhi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,31 +23,47 @@ t_list	*ft_lstlast(t_list *lst)
 	return (lst);
 }
 
-// if malloc failed, it will be invalied in isvalid_stack function.
-int	stack_init(t_list **a, char **argv)
+int	ft_lstsize(t_list *lst)
 {
-	int		i;
-	t_list	*new;
+	int	size;
 
-	if (!a || !argv)
-		return (1);
-	i = 1;
-	while (argv[i])
+	size = 0;
+	while (lst)
 	{
-		new = (t_list *)malloc(sizeof(t_list));
-		if (!new)
-			return (1);
-		new->nbr = atol_numeric_only(argv[i]);
-		new->prev = NULL;
-		new->next = NULL;
-		if (!*a)
-			*a = new;
-		else
-		{
-			new->prev = (ft_lstlast(*a));
-			new->prev->next = new;
-		}
-		i++;
+		size++;
+		lst = lst->next;
 	}
-	return (0);
+	return (size);
+}
+
+int	max_nbr(t_list *lst)
+{
+	int	max;
+
+	max = INT_MIN;
+	if (!lst)
+		return (INT_MIN);
+	while (lst)
+	{
+		if (lst->nbr > max)
+			max = lst->nbr;
+		lst = lst->next;
+	}
+	return (max);
+}
+
+int	min_nbr(t_list *lst)
+{
+	int	min;
+
+	min = INT_MAX;
+	if (!lst)
+		return (INT_MAX);
+	while (lst)
+	{
+		if (lst->nbr < min)
+			min = lst->nbr;
+		lst = lst->next;
+	}
+	return (min);
 }

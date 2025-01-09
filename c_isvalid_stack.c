@@ -6,7 +6,7 @@
 /*   By: oyuhi <oyuhi@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:28:04 by oyuhi             #+#    #+#             */
-/*   Updated: 2025/01/06 17:33:26 by oyuhi            ###   ########.fr       */
+/*   Updated: 2025/01/09 09:44:48 by oyuhi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 // if find invalid nbr return 1 as error
 int	invalid_stack(t_list *a)
 {
-	t_list *tmp;
+	t_list	*tmp;
+
 	while (a)
 	{
 		if (a->nbr > INT_MAX || a->nbr < INT_MIN)

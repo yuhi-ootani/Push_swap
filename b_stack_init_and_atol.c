@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   b_atol_numeric_only.c                              :+:      :+:    :+:   */
+/*   b_stack_init_and_atol.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oyuhi <oyuhi@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/24 14:55:34 by oyuhi             #+#    #+#             */
-/*   Updated: 2025/01/06 15:51:58 by oyuhi            ###   ########.fr       */
+/*   Updated: 2025/01/09 15:19:38 by oyuhi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static int	ft_isspace(char c)
-{
-	return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f'
-		|| c == '\r');
-}
+// static int	ft_isspace(char c)
+// {
+// 	return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f'
+// 		|| c == '\r');
+// }
 
 static int	ft_isnumber(char c)
 {
@@ -32,6 +32,7 @@ static long long	ft_sign(char c)
 	return (1);
 }
 
+// if string is not numeric it return LONG_MAX or LONG_MIN
 long	atol_numeric_only(const char *nptr)
 {
 	long long	result;
@@ -40,13 +41,13 @@ long	atol_numeric_only(const char *nptr)
 	if (!nptr || !nptr[0])
 		return (LONG_MAX);
 	result = 0;
-	while (ft_isspace(*nptr))
-	{
+	while (*nptr == ' ')
 		nptr++;
-	}
 	sign = ft_sign(*nptr);
 	if (*nptr == '+' || *nptr == '-')
 		nptr++;
+	if (!(*nptr))
+		return (LONG_MAX);
 	while (*nptr)
 	{
 		if (!ft_isnumber(*nptr) || (result > (LONG_MAX - (*nptr - '0')) / 10))
@@ -59,6 +60,35 @@ long	atol_numeric_only(const char *nptr)
 		nptr++;
 	}
 	return ((result * sign));
+}
+
+// if malloc failed, it will be invalied in isvalid_stack function.
+int	stack_init(t_list **a, char **argv)
+{
+	int		i;
+	t_list	*new;
+
+	if (!a || !argv)
+		return (1);
+	i = 1;
+	while (argv[i])
+	{
+		new = (t_list *)malloc(sizeof(t_list));
+		if (!new)
+			return (1);
+		new->nbr = atol_numeric_only(argv[i]);
+		new->prev = NULL;
+		new->next = NULL;
+		if (!*a)
+			*a = new;
+		else
+		{
+			new->prev = (ft_lstlast(*a));
+			new->prev->next = new;
+		}
+		i++;
+	}
+	return (0);
 }
 
 // // don't need to return 0 if NULL is passed.

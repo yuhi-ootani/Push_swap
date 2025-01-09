@@ -1,42 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   a1_main.c                                          :+:      :+:    :+:   */
+/*   a_main_error_free.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oyuhi <oyuhi@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 15:48:14 by oyuhi             #+#    #+#             */
-/*   Updated: 2025/01/06 18:31:17 by oyuhi            ###   ########.fr       */
+/*   Updated: 2025/01/09 16:05:19 by oyuhi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-// delete
-#include <stdio.h>
 
-void	print_list(t_list *head)
+void	free_all(char **argv, int argc, t_list *a)
 {
-	t_list	*current;
+	int		i;
+	t_list	*tmp;
 
-	current = head;
-	while (current != NULL)
+	i = 1;
+	if (argv && argc == 2)
 	{
-		printf("%ld -> ", current->nbr);
-		// Print the  of the current node
-		current = current->next; // Move to the next node
+		while (argv[i])
+			free(argv[i++]);
+		free(argv);
 	}
-	printf("NULL\n"); // Indicate the end of the list
+	if (a)
+	{
+		while (a)
+		{
+			tmp = a;
+			a = a->next;
+			free(tmp);
+		}
+	}
 }
 
-int	issort(t_list *a)
+void	error_free(char **argv, int argc, t_list *a)
 {
-	while (a->next)
-	{
-		if (a->nbr > a->next->nbr)
-			return (0);
-		a = a->next;
-	}
-	return (1);
+	free_all(argv, argc, a);
+	write(1, "Error\n", 6);
+	exit(1);
 }
 
 // Original argv:
@@ -58,8 +61,23 @@ int	main(int argc, char **argv)
 	error_flag = stack_init(&a, argv);
 	if (invalid_stack(a) || !argv || error_flag)
 		error_free(argv, argc, a);
-	if (!issort(a))
-		ft_sort(&a, &b);
+	ft_sort(&a, &b);
 	free_all(argv, argc, a);
 	return (0);
 }
+
+//*************comments out *************/
+// #include <stdio.h>
+
+// void	print_list(t_list *head)
+// {
+// 	t_list	*current;
+
+// 	current = head;
+// 	while (current != NULL)
+// 	{
+// 		printf("%ld -> ", current->nbr);
+// 		current = current->next;
+// 	}
+// 	printf("NULL\n");
+// }

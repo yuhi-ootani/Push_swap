@@ -1,43 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_free.c                                       :+:      :+:    :+:   */
+/*   operation_push.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oyuhi <oyuhi@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/05 16:37:43 by oyuhi             #+#    #+#             */
-/*   Updated: 2025/01/06 17:19:29 by oyuhi            ###   ########.fr       */
+/*   Created: 2025/01/07 07:27:25 by oyuhi             #+#    #+#             */
+/*   Updated: 2025/01/08 13:53:35 by oyuhi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	free_all(char **argv, int argc, t_list *a)
+static void	push(t_list **dest, t_list **src)
 {
-	int		i;
-	t_list	*tmp;
+	t_list	*pushed_lst;
 
-	i = 1;
-	if (argv && argc == 2)
-	{
-		while (argv[i])
-			free(argv[i++]);
-		free(argv);
-	}
-	if (a)
-	{
-		while (a)
-		{
-			tmp = a;
-			a = a->next;
-			free(tmp);
-		}
-	}
+	if (!*src)
+		return ;
+	pushed_lst = *src;
+	*src = (*src)->next;
+	if (*src)
+		(*src)->prev = NULL;
+	pushed_lst->next = *dest;
+	if (*dest)
+		(*dest)->prev = pushed_lst;
+	pushed_lst->prev = NULL;
+	*dest = pushed_lst;
 }
 
-void	error_free(char **argv, int argc, t_list *a)
+void	pa(t_list **a, t_list **b)
 {
-	free_all(argv, argc, a);
-	write(1, "Error\n", 6);
-	exit(1);
+	push(a, b);
+	write(1, "pa\n", 3);
+}
+
+void	pb(t_list **b, t_list **a)
+{
+	push(b, a);
+	write(1, "pb\n", 3);
 }
